@@ -22,3 +22,13 @@ export const  signSchema = z
   export type TsignupSchema  = z.infer< typeof signSchema>
 
 
+  export const loginSchema = z.object({
+    email : z.string().email(("please enter a valid email")) ,
+     password : z.string()
+    .min(8 , "password required atleast 8 characters")
+    .max(20 , "password only  contains 20 characters") ,
+})
+
+export type TLoginSchema = z.infer<typeof loginSchema>
+
+
