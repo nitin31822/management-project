@@ -3,19 +3,15 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllPosts } from '../../constants/posts/allpostsquery'
-import {Card, CardBody, CardFooter, Image} from "@nextui-org/react";
+
 import { useRouter } from 'next/navigation';
-import { postType } from '../api/posts/get-all-posts/route';
-import { AppDispatch } from '../state/store';
-import { useDispatch } from 'react-redux';
-import { inPost } from '../state/posts/postSlice';
-import { useQueryClient } from '@tanstack/react-query';
+
+import Post from '../../Components/Post';
+import { Button } from '../../@/components/ui/button';
 
 function page() {
   const router = useRouter()
-  const querClient = useQueryClient()
-  const dispatch : AppDispatch = useDispatch()
-  const {data:posts,isFetching}=useQuery({
+  const {data,isFetching}=useQuery({
     queryKey:["posts"],
     queryFn: async () => await getAllPosts()
   })
@@ -23,16 +19,11 @@ function page() {
     return <div>Is Fetching...</div>
     
   }
-  if (!posts) {
+  if (!data) {
     return <div>posts nahi hai</div>
   }
 
-  const pushToPost =async (post : postType) =>{
-     await querClient.invalidateQueries({queryKey : ["post"], exact: true})
-    await querClient.invalidateQueries({queryKey : ["PostComments"], exact: true})
-    dispatch(inPost(post.id))
-    router.push(`/posts/${post.id}`)
-  }
+ 
 
 
   
@@ -63,28 +54,10 @@ function page() {
     //   ))}
     
     //   </>
-    <div className="gap-8 grid grid-cols-1 sm:grid-cols-3 h-3/4 overflow-auto">
-    {posts.map((item, index) => (
-      <Card shadow="sm" key={index} isPressable onClick={() => pushToPost(item)} className=' rounded-lg'>
-        <CardBody className="overflow-visible p-0">
-          <Image
-            shadow="sm"
-            radius="lg"
-            width="100%"
-            alt={item.title ? item.title : "image"}
-            className="w-full object-cover h-[200px]"
-            src={item.photo ? item.photo  : ""}
-          />
-        </CardBody>
-        <CardFooter className="text-small justify-between">
-          < b className=' ml-4'>{item.postOwner.name}</b>
-         
-          <p className="text-default-500  mr-4">18 April at 22:09</p>
-          
-        </CardFooter>
-      </Card>
-    ))}
-  </div>
+    <main className=" flex flex-col gap-4">
+    <Button onClick={()=> router.push("/posts/createpost")} className=' bg-white'> Create Post </Button>
+  {data.posts.map((post)=> <Post  postData={post} key={post.post.id} ></Post>)}
+  </main>
 
   )
 }

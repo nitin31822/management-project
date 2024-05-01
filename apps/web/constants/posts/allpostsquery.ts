@@ -1,13 +1,13 @@
 import axios from "axios";
-import { postType } from "../../app/api/posts/get-all-posts/route";
+import { postInterface, postType } from "../../app/api/posts/get-all-posts/route";
  
 interface posts{
     message:string,
-    posts:Array<postType>
+    posts:Array<postInterface>
 }
 
 export const getAllPosts = async()=>{
     const{data}:{data:posts} = await axios.get('/api/posts/get-all-posts')
        
-        return data.posts
+        return data
 }

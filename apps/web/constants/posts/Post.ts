@@ -1,6 +1,6 @@
 import { comment } from "@prisma/client"
 import axios from "axios"
-import { postType } from "../../app/api/posts/get-all-posts/route"
+import { postInterface, postType } from "../../app/api/posts/get-all-posts/route"
 
 interface createCommentResponse {
     message : string ,
@@ -14,7 +14,7 @@ interface toggleLikePostRespone {
 
 interface getPostReturnTYpe {
     message  : string
-    post : postType
+    post : postInterface
 }
 
 export const createComent = async(postID : string , content : string) => {
