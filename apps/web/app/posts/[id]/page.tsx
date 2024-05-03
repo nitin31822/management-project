@@ -25,9 +25,11 @@ function page({ params }: { params: parmas }) {
   }
 
   return (
-    <main>
-      <Post postData={postData}></Post>
-    </main>
+    <main className=' lg:w-full lg:h-[400px] lg:flex lg:flex-row lg:justify-center lg:items-center ' >
+    <div className=' lg:w-1/2  lg:flex lg:flex-row lg:justify-center '>
+    <Post postData={postData} ></Post>
+    </div>
+   </main>
   );
 }
 

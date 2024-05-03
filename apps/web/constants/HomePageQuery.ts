@@ -1,5 +1,5 @@
 import axios from "axios"
-import { postType } from "../app/api/posts/get-all-posts/route"
+import { postInterface, postType } from "../app/api/posts/get-all-posts/route"
 
 interface Taskk {
     story : taskStory 
@@ -25,7 +25,7 @@ interface Taskk {
   interface REturnTypeHomePage {
     message : string 
     tasks  : null | Array<Taskk> 
-    posts  : Array<postType>
+    posts  : Array<postInterface>
   }
 
 export const HoemPageQuery = async () => {

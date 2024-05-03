@@ -40,7 +40,7 @@ const ImageUploadComponent: React.FC = () => {
       }
 
       const formData = new FormData();
-      formData.append('post', imageFile); 
+      formData.append('image', imageFile); 
       
       const res = await axios.post(
         `/api/posts/createPost?OrgId=661beb1e84fc1cc427ea2a78`,
@@ -51,6 +51,8 @@ const ImageUploadComponent: React.FC = () => {
           },
         }
       );
+      console.log( "create res ",res);
+      
 
 
     
@@ -67,29 +69,55 @@ const ImageUploadComponent: React.FC = () => {
   };
 
   return (
-    <div>
+    // <div>
      
-      <form onSubmit={handleSubmit(onSubmit)} className=' flex flex-col gap-4'>
+    //   <form onSubmit={handleSubmit(onSubmit)} className=' flex flex-col gap-4'>
 
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-         <Label className=' text-white' htmlFor="picture">Add Image</Label>
-         <Input type="file" accept="image/*" {...register('image')} onChange={handleImageChange} />
-       </div>
+    //   <div className="grid w-full max-w-sm items-center gap-1.5">
+    //      <Label className=' text-white' htmlFor="picture">Add Image</Label>
+    //      <Input type="file" accept="image/*" {...register('image')} onChange={handleImageChange} />
+    //    </div>
        
      
-       <div className=' border border-white h-[200px] w-full'>
-       {previewImage && (
-            <img
-              src={previewImage} 
-              alt="Selected"
-              className=' h-full w-full '
-            />
+    //    <div className=' border border-white h-[200px] w-full'>
+    //    {previewImage && (
+    //         <img
+    //           src={previewImage} 
+    //           alt="Selected"
+    //           className=' h-full w-full '
+    //         />
         
-        )}
-       </div>
-        <Button className=' bg-white' type="submit">{creating ? "Creating" : "Create"}</Button>
-      </form>
-    </div>
+    //     )}
+    //    </div>
+    //     <Button className=' bg-white' type="submit">{creating ? "Creating" : "Create"}</Button>
+    //   </form>
+    // </div>
+
+    <div className=' lg:h-[500px]'>
+     
+    <form onSubmit={handleSubmit(onSubmit)} className=' flex flex-col gap-4'>
+
+    <div className="grid w-full max-w-sm items-center gap-1.5 ">
+       <Label className=' text-white' htmlFor="picture">Add Image</Label>
+       <Input type="file" accept="image/*" {...register('image')} onChange={handleImageChange} />
+     </div>
+     
+   
+     <div className=' lg:flex lg:flex-row lg:justify-center border border-white  h-[200px] lg:h-[300px] w-full lg:w-1/2 '>
+     {previewImage && (
+          <img
+            src={previewImage} 
+            alt="Selected"
+            className=' h-full w-full '
+          />
+      
+      )}
+     </div>
+     <div className=' '>
+     <Button className=' bg-white lg:w-1/3 ' type="submit">{creating ? "Creating" : "Create"}</Button>
+     </div>
+    </form>
+  </div>
   );
 };
 

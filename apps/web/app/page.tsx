@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { HoemPageQuery } from '../constants/HomePageQuery'
+import Post from '../Components/Post'
 
 
 
@@ -14,14 +15,12 @@ function HomePage() {
     return <h1 className=' text-white'>Loading</h1>
   }
   return (
-  //  <main>
-  //     <div>
-  //       {data?.posts .map((post)=>(
-
-  //       ))}
-  //     </div>
-  //  </main>
-  <h1 className=' text-white'>Homepage</h1>
+<main className=" flex flex-col gap-4">
+  
+  <div className=" flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:gap-5">
+    {data?.posts.map((post) => <Post postData={post}></Post>)}
+  </div>
+</main>
   )
 }
 
