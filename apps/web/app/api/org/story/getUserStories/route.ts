@@ -32,42 +32,55 @@ export async function GET(req:NextRequest) {
      console.log(user);
      
 
-    //  const Stories = await prisma.story.findMany({
-    //     where:{
-    //     employees:{
-    //         every:{
-    //             id : user.id
-    //         }
+     const Stories = await prisma.story.findMany({
+      where : {
+         OR : [
+             {
+                 managerId : {
+                     equals : user.id
+                 }
+             } ,
+            {
+             employees : {
+                 every : {
+                     id : user.id
+                 }
+             }
+            }
+         ]
+     } ,
+        select:{
+        
+            name:true,
+            id:true,
+            headline:true,
+            socketRoomName:true,
+            manager:{
+               select:{
+                  name:true,
+                  avatar:true
+               }
+            },
+            employees:{
+               select:{
+                  name:true,
+                  avatar:true
+               }
+            },
             
 
-            
-    //     },
-    //     employeeID : {
-    //         has : user.id
-    //     },
-    //     manager:{
-    //         id:user.id
-    //     }
-    //     },
-    //     select:{
+
+        }
+     })
+//     const Stories = await prisma.story.findMany()
+//      if (Stories===null) {
+//         return NextResponse.json({
+//             message:"stories of user get , stories are null",
+
+//         })
         
-    //         name:true,
-    //         id:true,
-    //         headline:true,
-    //         socketRoomName:true
-
-
-    //     }
-    //  })
-    const Stories = await prisma.story.findMany()
-     if (Stories===null) {
-        return NextResponse.json({
-            message:"stories of user get , stories are null",
-
-        })
-        
-     }
-console.log(Stories);
+//      }
+// console.log(Stories);
 
      return NextResponse.json({
         message:"stories of user get",

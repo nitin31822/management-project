@@ -4,6 +4,8 @@ import React, { createContext, FC, useCallback,useState, useContext, useEffect }
 import { Provider } from "react"
 import {io,Socket } from "socket.io-client";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "./state/store";
 
  export interface message{
   content:string,
@@ -38,6 +40,7 @@ interface SocketProviderProps {
     Messages: Array<message> 
     clearMessages: () => void;
     sendTask:(roomName:string,Task:ITask)=> Promise<boolean>;
+    Tasks : Array<ITask>
   }
   
   
@@ -53,7 +56,8 @@ export const  useSocket = ()=>{
 export const SocketProvider :React.FC<SocketProviderProps>=({children})=>{
   const [Socket, setSocket] = useState<Socket>();
   const [Messages,setMessages] = useState<message[]>([])
-
+  const [Tasks  , setTasks] = useState<ITask[]>([])
+ const userData = useSelector((state:RootState)=>state.auth.user)
   const clearMessages : IsocketContext["clearMessages"] = useCallback(() => {
     setMessages([]); // Clearing messages array
   }, []);
@@ -124,12 +128,29 @@ export const SocketProvider :React.FC<SocketProviderProps>=({children})=>{
     )
   
     
-    const onMessageRec = useCallback((Message:message)=>{
+    const onMessageRec = useCallback((Message:message|ITask)=>{
        console.log("Message recieved from server" , Message);
 
        
 
-       setMessages((prev)=>[...prev,Message])
+       if ('content' in Message && 'sender' in Message && 'roomName' in Message) {
+        console.log("message hai");
+        
+        // Object is of type Message
+        // this.io.emit('message', parsedData as message);
+        setMessages((prev) => [...prev, Message]);
+      } else if ('content' in Message && 'title' in Message && 'Manager' in Message && 'employee' in Message) {
+        // Object is of type Task
+        console.log("task hai");
+        setTasks((prev) => [...prev, Message]);
+      } 
+      // else if("sender" in Message && "reciever" in Message && "reciever" in Message ) {
+      //   console.log("Notification hai");
+      //   setNotifications((prev)=>[...prev , Message])
+      // }
+      else {
+        console.error('Received data does not match expected format.');
+      }
       
        
        
@@ -140,20 +161,68 @@ export const SocketProvider :React.FC<SocketProviderProps>=({children})=>{
 
     
 
-        useEffect(()=>{
-          const _socket = io('http://localhost:3002')
-          _socket.on("RecivedMessage",onMessageRec)
+        // useEffect(()=>{
+        //   const _socket = io('http://localhost:3002')
+        //   _socket.on("RecivedMessage",onMessageRec)
 
-          setSocket(_socket)
+        //   setSocket(_socket)
 
-          return ()=>{
-            _socket.disconnect
-            setSocket(undefined)
-          }
-        },[]);
+        //   return ()=>{
+        //     _socket.disconnect
+        //     setSocket(undefined)
+        //   }
+        // },[]);
+        
+  useEffect(() => {
+    // const _socket = io("http://localhost:3002");
+    // _socket.on("RecivedMessage", onMessageRec);
+    // // _socket.on("RecievedTask" , onTaskRecievd)
+
+    
+
+    // setSocket(_socket);
+
+    const initializeSocket = async () => {
+      const _socket = io("http://localhost:3002");
+      _socket.on("RecivedMessage", onMessageRec);
+  
+      setSocket(_socket);
+  
+      // Join room immediately after socket is initialized
+     const res =  await joinRoom("notifcation ka liya");
+     console.log("notification" ,res);
+     
+    };
+  
+    initializeSocket();
+
+  
+   
+   
+
+    return () => {
+      if (Socket) {
+        Socket.disconnect();
+        setSocket(undefined);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const joinRoomIfSocketInitialized = async () => {
+      if (Socket) {
+      if (userData) {
+        await joinRoom(`${userData.id}_${userData.name}`);
+      }
+      }
+    };
+
+    joinRoomIfSocketInitialized();
+  }, [Socket, joinRoom]);
+
 
    return (
-    <socketContext.Provider value={{sendMessage,joinRoom,Messages , clearMessages , sendTask}}>
+    <socketContext.Provider value={{sendMessage,joinRoom,Messages , clearMessages , sendTask,Tasks}}>
     {children}
     </socketContext.Provider>
    )

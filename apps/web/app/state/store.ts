@@ -6,6 +6,9 @@ import storage from "redux-persist/lib/storage";
 import orgReducer from "./org/orgSlice"
 import storyReducer from "./story/storySlice"
 import postReducer from "../state/posts/postSlice"
+import queryReducer from "../state/query/querySlice"
+import storyIDSlice from "./storyID/storyIDSlice";
+import taskSlice from "./task/taskSlice";
 
 
 
@@ -24,6 +27,10 @@ const rootReducer = combineReducers({
   org: orgReducer,
   story:storyReducer,
   post:postReducer,
+  query:queryReducer,
+  storyID:storyIDSlice,
+  task:taskSlice
+
 
 })
 

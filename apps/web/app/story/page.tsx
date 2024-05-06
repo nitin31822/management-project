@@ -2,10 +2,15 @@
 import Link from 'next/link'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getUserStories, storyType, userStories } from '../../constants/userStoriesFn'
-import { Story } from '@prisma/client'
+import { getUserStories, story, storyType, userStories } from '../../constants/userStoriesFn'
+
 import { useRouter } from 'next/navigation'
 import { useSocket } from '../socketProvider'
+import { Button } from '../../@/components/ui/button'
+import Story from '../../Components/story'
+import { Istory } from '../../constants/storyQueryFn'
+
+
 
 
 
@@ -28,40 +33,18 @@ function page() {
         return <div>Is Fetching...</div>
         
     }
-    const visitStory = async(visitStory: userStories)=>{
+    const visitStory = async(visitStory: story)=>{
       const res = await RoomJoin(visitStory.socketRoomName)
       router.push(`/story/${visitStory.id}`)
 
     }
   return (
-    <>
-    <div className='flex'>
-        <Link className='h-8 w-28 border border-orange-500 ' href="/story/select-org">Create Story</Link>
-        <Link className='h-8  w-16   flex-1  ml-64' href="/story/select-org-to-watch-stories">Check Org Stories</Link> 
+    <main>
+    <Button onClick={()=> router.push("/story/create-story/select-org")} className=" bg-white text-xl" >Create Story</Button>
+    <div className="flex flex-col gap-5 mt-6">
+    {Stories?.map((story) => <Story story={story} />)}
     </div>
-    <h1 className='mt-3'>All The Stories Of The User</h1>
-
-   {Stories?.map((story)=>(
-    <div onClick={()=>{visitStory(story)}} className='group border-solid border-2 hover:border-black  h-28 w-screen mt-2'>
-
-      <div className='h-12  w-96 mt-2'>
-      <h1 >{story.name}</h1>  
-
-      </div>
-      <h1 className='mt-2'>{story.headline}</h1> 
-
-      
-    
-
-      
-    </div>
-   
-   ))}
-
-   <div>
-   
-    </div>
-    </>
+    </main>
   )
 }
 

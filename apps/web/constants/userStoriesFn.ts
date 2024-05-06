@@ -26,7 +26,7 @@ interface tasks{
     taskSocketRoom:string
 
 }
- interface story{
+  export interface story{
     name: string
     employees:Array<employees>
     manager:manager|null
@@ -50,7 +50,7 @@ export interface storyType{
 }
 export interface ReturnUSerStories {
     message : string 
-    Stories  : Array<userStories>
+    Stories  : Array<story>
 }
 export async function getUserStories() {
     const {data}:{data:ReturnUSerStories} = await axios.get('/api/org/story/getUserStories')

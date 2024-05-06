@@ -28,7 +28,8 @@ export async function GET(req:NextRequest) {
             manager:{
                 select:{
                     name:true,
-                    avatar:true
+                    avatar:true,
+                    id:true
                 }
             },
             name:true,

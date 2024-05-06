@@ -21,6 +21,7 @@ function Profile() {
   }
   if (isFetching) {
     return <div>Is Fetching...</div>;
+
   }
 
   const postPush = (user: User) => {

@@ -7,6 +7,7 @@ import { navItem } from "../TypeScript-Types/types";
 import MenuOverlay from "./MenuOverlay";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/state/store";
+import SearchComponent from "./SearchComponent";
 
 
 
@@ -28,11 +29,7 @@ function Navbar  ()  {
 
     const [navbarOpen, setNavbarOpen] = useState(false);
     const navitems : Array<navItem> = [
-      {
-          title : "Search",
-          path : "/Search" ,
-          isActive : true
-      } ,
+     
       {
           title : "Posts" ,
           path : "/posts" ,
@@ -94,7 +91,9 @@ function Navbar  ()  {
             ))}
           </ul>
         </div>
+        <SearchComponent/>
       </div>
+      
       {navbarOpen ? <MenuOverlay links={navitems} /> : null}
     </nav>
     )

@@ -28,7 +28,8 @@ interface employees{
 }
 interface   manager{
     name:string,
-    avatar:string|null
+    avatar:string|null,
+    id:string
 
 }
  export interface Istory{
