@@ -12,11 +12,11 @@ function TaskCard({task} : {task : ITask}) {
     <p className="text-gray-600 mt-2">{task.content}</p>
     <div className="flex items-center mt-4">
       <span className="text-gray-700">Task Sender:</span>
-      <p className="text-gray-700 ml-2 font-bold">{task.Manager.name} </p>
+      <p className="text-gray-700 ml-2 font-bold">{task.sender.name} </p>
     </div>
     <div className="flex items-center mt-2">
       <span className="text-gray-700 ">Task Receiver:</span>
-      <p className="text-gray-700 ml-2 font-bold">{task.employee.name}</p>
+      <p className="text-gray-700 ml-2 font-bold">{task.reciver.name}</p>
     </div>
   </div>
     )

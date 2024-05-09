@@ -12,9 +12,9 @@ function page() {
 
   return (
     <main>
-      {story?.employees.map((user) => (
-        <SendTaskEmployeesCard user={user}></SendTaskEmployeesCard>
-      ))}
+      {story?.employees? story.employees.map((user) => (
+          <SendTaskEmployeesCard user={user}></SendTaskEmployeesCard>
+      )) : null}
     </main>
   );
 }

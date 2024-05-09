@@ -23,7 +23,10 @@ interface org{
 }
 interface employees{
     name:string,
-    avatar:string|null
+    avatar:string|null,
+    email:string
+    id:string
+    
 
 }
 interface   manager{

@@ -33,7 +33,10 @@ model User {
   likes           like[]
   messages        Message[]
   // recieversID     String[] @db.ObjectId
-  // revievers       Message[]  @relation("recievers" , fields: [recieversID] , references: [id])   
+  // revievers       Message[]  @relation("recievers" , fields: [recieversID] , references: [id]) 
+  notificationREcivers  Notification[]
+   notificatonSenders  Notification[] @relation("sender")
+
   @@map("users")
 }
 
@@ -50,6 +53,7 @@ model Story {
   employeeID     String[] @db.ObjectId
   employees      User[]   @relation(fields: [employeeID], references: [id])
   Tasks          Task[]
+   notifications Notification[]
   // messagesGroup  Message?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -74,6 +78,7 @@ model Org {
   employees      User[]   @relation("employees", fields: [employeeID], references: [id])
   ownerID        String[] @db.ObjectId
   owner          User[]   @relation(fields: [ownerID], references: [id])
+  notifications Notification[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   posts          Post[]
@@ -93,6 +98,7 @@ model Task {
   sender             User?    @relation("TaskSender", fields: [senderId], references: [id])
   reciverId          String   @db.ObjectId
   reciver            User?    @relation("taskReciver", fields: [reciverId], references: [id])
+  notifications Notification[]
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -124,6 +130,7 @@ model Post {
   videoDuration String?
   likes        like[] 
   comments   comment[]
+  notifications Notification[]
   impressions  Int   @default(0)
   createdAt   DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -177,4 +184,23 @@ model Message {
   updatedAt  DateTime @updatedAt
 
   @@map("messages")
+}
+model Notification {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  senderID String @db.ObjectId
+  sender   User @relation( "sender",fields: [senderID] , references: [id])
+  recieverID String @db.ObjectId
+  reciever User @relation(fields: [recieverID] , references: [id])
+  content String
+  createdAt DateTime @default(now())
+  postID   String? @db.ObjectId
+  post     Post? @relation(fields: [postID] , references: [id])
+  OrgID   String? @db.ObjectId
+  Org     Org? @relation(fields: [OrgID] , references: [id])
+  StoryID  String? @db.ObjectId
+  Story    Story? @relation(fields: [StoryID] , references: [id]) 
+  TaskID   String? @db.ObjectId
+  Task     Task?  @relation(fields: [TaskID] , references: [id])
+
+  @@map("notifications")
 }

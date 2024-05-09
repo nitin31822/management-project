@@ -11,7 +11,7 @@ function StoryTasks() {
   const story = useSelector((state : RootState)=> state.story.story)
   const user  = useSelector((state : RootState)=> state.auth.user)
   const {Tasks} = useSocket() 
-  console.log(Tasks);
+  console.log( "tasks",Tasks);
   
   if (!user) {
     return <div>Please Login</div>

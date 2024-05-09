@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { RedisService } from "./redis";
+import { INotification, RedisService } from "./redis";
 
 
 
@@ -77,11 +77,19 @@ class SocketService {
           status:true
         })
       })
+      socket.on("sendNotification",async(roomName:string,Notification:INotification,callback:Function)=>{
+        await this.redisPubSub.publishNotificationToRoom(roomName,Notification )
+
+        callback({
+          status:true
+        })
+      })
       
 
     });
     
     console.log("InIt Socket Listners");
+    
   }
 
   private async joinRoom(socket : Socket , roomName : string ):Promise<void>{

@@ -1,8 +1,20 @@
 import {Redis} from "ioRedis"
 import { Server } from "socket.io"
 import { message  , Task} from "./socket"
+import { json } from "express"
 
 type RecievedData = message | Task
+export interface INotification {
+    content : string 
+    sender  : user
+    reciever : user
+  }
+  interface user {
+    name: string;
+    avatar: string | null;
+    id: string;
+  }
+  
 
 class RedisService {
     private io:Server
@@ -26,6 +38,19 @@ class RedisService {
                 else {
                     console.log(`publish to channel ${roomName} and the message is ${Message}`);   
                 }})
+    }
+    public async publishNotificationToRoom(roomName:string,Notification:INotification){
+        await this.pub.publish(roomName,JSON.stringify(Notification),(err,result)=>{
+            if (err) {
+                console.log(`error while publish to channel ${roomName}  `);   
+                return err
+            }
+            else {
+                console.log(`publish to channel ${roomName} and the message is ${Notification}`);   
+            }
+            
+
+        })
     }
 
     public async publishTaskToRoom(roomName:string,Task:Task){
@@ -62,22 +87,22 @@ class RedisService {
                     const parsedData : RecievedData   = JSON.parse(Message)
                     console.log("parsed item" , parsedData);
 
-                    if ('content' in parsedData && 'sender' in parsedData && 'roomName' in parsedData) {
-                        console.log("message hai");
+                    // if ('content' in parsedData && 'sender' in parsedData && 'roomName' in parsedData) {
+                    //     console.log("message hai");
                         
-                        // Object is of type Message
-                        // this.io.emit('message', parsedData as message);
-                        this.io.to(roomName).emit("RecivedMessage" , parsedData as message)
-                      } else if ('content' in parsedData && 'title' in parsedData && 'Manager' in parsedData && 'employee' in parsedData) {
-                        // Object is of type Task
-                        console.log("task hai");
+                    //     // Object is of type Message
+                    //     // this.io.emit('message', parsedData as message);
+                    //     this.io.to(roomName).emit("RecivedMessage" , parsedData as message)
+                    //   } else if ('content' in parsedData && 'title' in parsedData && 'Manager' in parsedData && 'employee' in parsedData) {
+                    //     // Object is of type Task
+                    //     console.log("task hai");
                         
-                        this.io.emit('task', parsedData as Task);
-                      } else {
-                        console.error('Received data does not match expected format.');
-                      }
+                    //     this.io.emit('task', parsedData as Task);
+                    //   } else {
+                    //     console.error('Received data does not match expected format.');
+                    //   }
                   
-                    
+                     this.io.to(roomName).emit("RecivedMessage" , parsedData)
                     
                     //
                    

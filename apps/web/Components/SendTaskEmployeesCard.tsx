@@ -12,7 +12,7 @@ import { useSocket, ITask } from "../app/socketProvider";
 function SendTaskEmployeesCard({ user }: { user: searchedItems }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { sendTask } = useSocket();
+  const { sendTask ,sendNotifications} = useSocket();
   const task = useSelector((state: RootState) => state.task.Task);
   const story = useSelector((state: RootState) => state.story.story);
   if (task === null) {
@@ -25,9 +25,9 @@ function SendTaskEmployeesCard({ user }: { user: searchedItems }) {
   const sendTaskToUser = async () => {
     const sendTaskType: ITask = {
       content: task?.content,
-      employee: user,
+      reciver: user,
       title: task?.title,
-      Manager: task.Manager,
+      sender: task.Manager,
     };
     const res = await sendTask(story.socketRoomName, sendTaskType);
     console.log("send task res", res);
@@ -38,7 +38,7 @@ function SendTaskEmployeesCard({ user }: { user: searchedItems }) {
         title: sendTaskType.title,
       };
       const { data } = await axios.post(
-        `/api/org/story/task/create-task?reciverID=${sendTaskType.employee.id}&storyID=${story.id}`,
+        `/api/org/story/task/create-task?reciverID=${sendTaskType.reciver.id}&storyID=${story.id}`,
         DatabaseTaskDetails
       );
       console.log("axios data", data);
